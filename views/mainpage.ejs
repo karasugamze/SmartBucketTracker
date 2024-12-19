@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap">
+    <link rel="stylesheet" href="./style.css">
+    <title>Smart Budget Tracker</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #6d5dfc, #4bb3fd);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-container {
+            text-align: center;
+            width: 100%;
+            max-width: 450px;
+            background-color: white;
+            border-radius: 12px;
+            padding: 40px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #4bb3fd;
+            margin-bottom: 10px;
+        }
+
+        .user-button {
+            padding: 10px 20px;
+            background-color: #4bb3fd;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-button:hover {
+            background-color: #399fdc;
+        }
+
+        .log-out {
+            background-color: #6d5dfc;
+        }
+
+        .log-out:hover {
+            background-color: #5742dc;
+        }
+
+        .calendar-chart {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .calendar,
+        .chart {
+            width: 48%;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .calendar:hover,
+        .chart:hover {
+            transform: translateY(-5px);
+        }
+
+        .bubbles {
+            display: flex;
+            justify-content: space-around;
+            margin: 0;
+        }
+
+        .bubble {
+            width: 120px;
+            height: 120px;
+            background-color: #6d5dfc;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            gap: 0px;
+        }
+
+        .bubble p {
+            margin: 0;
+        }
+
+        .bubble:hover {
+            background-color: #5742dc;
+            transform: scale(1.1);
+        }
+
+        .categories {
+            margin-top: 30px;
+        }
+
+        .category-container {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-container:hover {
+            transform: translateX(10px);
+        }
+
+        .add-button {
+            background-color: #8ea0ba;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 32px;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        .add-button:hover {
+            background-color: #8ec2e7;
+        }
+
+        /* Income Modal */
+        #income-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #income-modal .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #income-modal input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        #income-modal button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            background-color: #6d5dfc;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #income-modal button:hover {
+            background-color: #5742dc;
+        }
+
+
+
+
+        .income-button:hover {
+            background-color: #ff6f6f;
+        }
+
+        /* Modal styles for Income */
+        #income-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #income-modal div {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 320px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        #income-modal input,
+        #income-modal button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        #income-modal button {
+            background-color: #6d5dfc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #income-modal button:hover {
+            background-color: #5742dc;
+        }
+
+
+
+        /* Modal styles */
+        #modal,
+        #category-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modal div,
+        #category-modal div {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 320px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        #modal input,
+        #modal select,
+        #modal button,
+        #category-modal button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        #modal button,
+        #category-modal button {
+            background-color: #6d5dfc;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #modal button:hover,
+        #category-modal button:hover {
+            background-color: #5742dc;
+        }
+
+        .delete-button {
+            background-color: #e57373;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Income Modal */
+        #income-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #income-modal .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #income-modal input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        #income-modal button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            background-color: #6d5dfc;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #income-modal button:hover {
+            background-color: #5742dc;
+        }
+
+        .income-button {
+            background-color: #6d5dfc;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .income-button:hover {
+            background-color: #ff6f6f;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <header>
+            <form action='/users/logout' method="POST">
+                <h1>Smart Budget Tracker</h1>
+                <button class="user-button">User Page</button>
+                <button class="user-button log-out" type="submit">Log Out</button>
+            </form>
+        </header>
+
+        <div class="calendar-chart">
+            <div class="calendar">
+                <h3>Calendar</h3>
+                <p>Daily Spending Overview</p>
+            </div>
+            <div class="chart">
+                <h3>Spending Chart</h3>
+                <p>Spending per Category</p>
+            </div>
+        </div>
+
+        <div class="bubbles">
+            <div class="bubble income">
+                <p>Income</p>
+                <p class="amount">00.00</p>
+            </div>
+            <div class="bubble expense">
+                <p>Expense</p>
+                <p class="amount">00.00</p>
+            </div>
+            <div class="bubble total">
+                <p>Total</p>
+                <p class="amount">00.00</p>
+            </div>
+        </div>
+
+        <div class="categories">
+            <h3>Spending Categories <button class="add-category-button">+</button></h3>
+            <div class="category-container">
+                <div class="category">Housing</div>
+                <div class="amount-column">00.00</div>
+                <button class="delete-button">Delete</button>
+            </div>
+            <div class="category-container">
+                <div class="category">Utilities</div>
+                <div class="amount-column">00.00</div>
+                <button class="delete-button">Delete</button>
+            </div>
+            <div class="category-container">
+                <div class="category">Food & Groceries</div>
+                <div class="amount-column">00.00</div>
+                <button class="delete-button">Delete</button>
+            </div>
+            <div class="category-container">
+                <div class="category">Transportation</div>
+                <div class="amount-column">00.00</div>
+                <button class="delete-button">Delete</button>
+            </div>
+            <div class="category-container">
+                <div class="category">Entertainment</div>
+                <div class="amount-column">00.00</div>
+                <button class="delete-button">Delete</button>
+            </div>
+        </div>
+
+        <button class="add-button">+</button>
+        <!-- Modal for adding income -->
+        <div id="income-modal">
+            <div class="modal-content">
+                <h3>Enter Income</h3>
+                <input type="number" id="income-amount" placeholder="Amount" required>
+                <button id="save-income">Save</button>
+                <button id="cancel-income">Cancel</button>
+            </div>
+        </div>
+
+        <button class="income-button">+</button>
+
+    </div>
+    <!-- Modal for adding an entry -->
+    <div id="modal">
+        <div>
+            <h3>Add Entry</h3>
+            <input type="date" id="date" required>
+            <input type="number" id="amount" placeholder="Amount" required>
+            <select id="category" required>
+                <option value="" disabled selected>Select Category</option>
+                <option value="housing">Housing</option>
+                <option value="utilities">Utilities</option>
+                <option value="food-groceries">Food & Groceries</option>
+                <option value="transportation">Transportation</option>
+                <option value="entertainment">Entertainment</option>
+            </select>
+            <button id="save-entry">Save</button>
+            <button id="cancel-entry">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Modal for adding a category -->
+    <div id="category-modal">
+        <div>
+            <h3>Add Category</h3>
+            <input type="text" id="new-category" placeholder="Category Name" required>
+            <button id="add-category">Add</button>
+            <button id="cancel-category">Cancel</button>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        // Select elements
+        const modal = document.getElementById('modal');
+        const categoryModal = document.getElementById('category-modal');
+        const addButton = document.querySelector('.add-button');
+        const addCategoryButton = document.querySelector('.add-category-button');
+        const cancelEntryButton = document.getElementById('cancel-entry');
+        const cancelCategoryButton = document.getElementById('cancel-category');
+        const saveEntryButton = document.getElementById('save-entry');
+        const addCategory = document.getElementById('add-category');
+
+        // Show add entry modal
+        addButton.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        // Show add category modal
+        addCategoryButton.addEventListener('click', () => {
+            categoryModal.style.display = 'flex';
+        });
+
+        // Close modals
+        cancelEntryButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        cancelCategoryButton.addEventListener('click', () => {
+            categoryModal.style.display = 'none';
+        });
+
+        // Save new entry
+        saveEntryButton.addEventListener('click', () => {
+            const date = document.getElementById('date').value;
+            const amount = document.getElementById('amount').value;
+            const category = document.getElementById('category').value;
+
+            if (date && amount && category) {
+                alert(`Entry Added!\nDate: ${date}\nAmount: ${amount}\nCategory: ${category}`);
+                modal.style.display = 'none';
+            } else {
+                alert('Please fill all fields!');
+            }
+        });
+
+        // Add new category
+        addCategory.addEventListener('click', () => {
+            const newCategory = document.getElementById('new-category').value;
+            if (newCategory) {
+                const categoriesDiv = document.querySelector('.categories');
+                const newCategoryContainer = document.createElement('div');
+                newCategoryContainer.classList.add('category-container');
+                newCategoryContainer.innerHTML = `
+                    <div class="category">${newCategory}</div>
+                    <div class="amount-column">00.00</div>
+                    <button class="delete-button">Delete</button>
+                `;
+                categoriesDiv.appendChild(newCategoryContainer);
+                categoryModal.style.display = 'none';
+
+                // Add delete functionality
+                newCategoryContainer.querySelector('.delete-button').addEventListener('click', () => {
+                    categoriesDiv.removeChild(newCategoryContainer);
+                });
+            } else {
+                alert('Please enter a category name!');
+            }
+        });
+
+        // Delete category functionality
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const categoryContainer = e.target.closest('.category-container');
+                categoryContainer.remove();
+            });
+        });
+
+        // Select elements
+        const incomeModal = document.getElementById('income-modal');
+        const incomeButton = document.querySelector('.income-button');
+        const saveIncomeButton = document.getElementById('save-income');
+        const cancelIncomeButton = document.getElementById('cancel-income');
+
+        // Show income modal
+        incomeButton.addEventListener('click', () => {
+            incomeModal.style.display = 'flex';
+        });
+
+        // Close income modal
+        cancelIncomeButton.addEventListener('click', () => {
+            incomeModal.style.display = 'none';
+        });
+
+        // Save income
+        saveIncomeButton.addEventListener('click', () => {
+            const incomeAmount = document.getElementById('income-amount').value;
+            if (incomeAmount && !isNaN(incomeAmount) && incomeAmount >= 0) {
+                document.querySelector('.income .amount').innerText = incomeAmount;
+                incomeModal.style.display = 'none';
+            } else {
+                alert('Please enter a valid income amount!');
+            }
+        });
+    </script>
+</body>
+
+</html>
