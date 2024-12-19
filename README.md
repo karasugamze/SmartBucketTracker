@@ -1,1 +1,2 @@
 "# SmartBucketTracker" 
+npm i yazın
